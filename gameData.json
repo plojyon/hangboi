@@ -1,0 +1,34 @@
+{
+	"pending": {},
+	"472463111656308747": {
+		"scope": "private",
+		"word": "YOUR MOTHER",
+		"maxStrikes": 12,
+		"progress": "_____",
+		"strikes": 1,
+		"letters": [
+			"B"
+		],
+		"finished": false
+	},
+	"472457946274463755": {
+		"scope": "public",
+		"word": "LUKETTEN",
+		"maxStrikes": 12,
+		"progress": "________",
+		"strikes": 0,
+		"letters": [],
+		"finished": false
+	},
+	"472462926108819468": {
+		"scope": "public",
+		"word": "<@472455557035458584>",
+		"maxStrikes": 12,
+		"progress": "<@472455557035458584>",
+		"strikes": 1,
+		"letters": [
+			"J"
+		],
+		"finished": false
+	}
+}
