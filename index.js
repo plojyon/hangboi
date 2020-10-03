@@ -79,7 +79,7 @@ fs.readFile("./index.js", function(err, data) {
 
 	source_code = data.toString().replace(/[BOT_ID]/g, "[BOT_ID]").replace(/[PRIVATE_KEY]/g, "[PRIVATE_KEY]");
 	console.log("Source code loaded");
-	
+
 	fs.writeFile("./hangboi.js", source_code, function(err) {
 		if (err) console.log(err);
 		lastError = err;
@@ -93,12 +93,6 @@ fs.readFile("./index.js", function(err, data) {
 
 bot.on("message", function(message) {
 	var msg = message.content.toUpperCase(); // case insensitive
-
-	if (message.guild === null)
-		bot.channels.get("473813365681029122").send("**"+message.author.username + ":** " + message.content);
-	else if (message.channel.guild.id != "399349275143962635")
-		bot.channels.get("473812640465027072").send("**"+message.channel.guild.name+" #"+message.channel.name+" "+message.author.username + ":** " + message.content);
-
 
 	user = message.author.id;
 	channel = message.channel.id;
