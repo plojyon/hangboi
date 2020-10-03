@@ -18,7 +18,4 @@ Help text:
 
 
 ##### P.S.
-
-If you encounter anything *enraging*, *paranoia-inducing* or anyhow *immoral* within my code,
-I tell you this: *Stallman was fucking right*.  
 I will not accept pull requests. Go make your own bot.
