@@ -2,7 +2,7 @@
   "name": "hangman_bot",
   "version": "1.0.0",
   "description": "A discord bot to play Hangman",
-  "main": "index.js",
+  "main": "hangboi.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
