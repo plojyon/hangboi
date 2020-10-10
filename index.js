@@ -3,7 +3,7 @@
  * 	    "HANGBOI"       *
  * **********************/
 // Invite link:
-// https://discordapp.com/oauth2/authorize?client_id=[BOT_ID]&scope=bot
+// https://discord.com/api/oauth2/authorize?client_id=472455557035458584&permissions=388160&scope=bot
 
 // Syntax:
 // `A` | O O O o o o o o o o o o
@@ -19,20 +19,19 @@ const MAX_STRIKES = 10;
 // FILE SYSTEM
 var fs = require('fs');
 
+// env variables (client secret)
+require('dotenv').config({path: __dirname + '/.env'});
 
-words = ["hangboi crashed and didnt recover properly; please let me know about this"];
+
+words = ["the dictionary failed to load"];
 
 games = {};
 
 pending = {};
 
-stats = {};
-
 alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
-helpText = "**HANGBOI HELP** *(in DMs, the `h!` prefix may be ommited)*\n \* `h!new [strikes]` - start a new game (I'll ask you for a word in private)\n \* `h!random` - start a new game with a random word\n \* `h!help` - display help\n \* `h!statistics` - check statistics\n \* `h!source` - view source code\n \* `status` - (only if a game is running) checks the game status [does not require the `h!` prefix]";
-
-source_code = "[error reading source]";
+helpText = "**HANGBOI HELP** *(in DMs, the `h!` prefix may be ommited)*\n \* `h!new [strikes]` - start a new game (I'll ask you for a word in private)\n \* `h!random` - start a new game with a random word\n \* `h!help` - display help\n \* `h!source` - view source code\n \* `status` - (only if a game is running) checks the game status [does not require the `h!` prefix]";
 
 // load dictionary
 fs.readFile("./dictionary.json", function(err, data) {
@@ -45,52 +44,6 @@ fs.readFile("./dictionary.json", function(err, data) {
 });
 
 
-// load games
-fs.readFile("./gameData.json", function(err, data) {
-	if (err) {
-		console.log(err);
-		return;
-	};
-	games = JSON.parse(data);
-	console.log("Game data loaded");
-	console.log(games);
-	setInterval(function(){save()}, 1000*60*60); // save once an hour, only if it loaded OK
-});
-
-
-// load statistics
-fs.readFile("./stats.json", function(err, data) {
-	if (err) {
-		console.log(err);
-		return;
-	};
-	stats = JSON.parse(data);
-	console.log("Stats loaded");
-	console.log(stats);
-});
-
-
-// load own code
-fs.readFile("./index.js", function(err, data) {
-	if (err) {
-		console.log(err);
-		return;
-	};
-
-	source_code = data.toString().replace(/[BOT_ID]/g, "[BOT_ID]").replace(/[PRIVATE_KEY]/g, "[PRIVATE_KEY]");
-	console.log("Source code loaded");
-
-	fs.writeFile("./hangboi.js", source_code, function(err) {
-		if (err) console.log(err);
-		lastError = err;
-
-		console.log("Source code rewritten");
-	});
-});
-
-
-
-
 bot.on("message", function(message) {
 	var msg = message.content.toUpperCase(); // case insensitive
 
@@ -98,7 +51,6 @@ bot.on("message", function(message) {
 	channel = message.channel.id;
 
 	if (message.author.bot) return;
-
 
 	// DEBUG:
 	// if the message is from me and starts with $, eval() the message
@@ -114,15 +66,9 @@ bot.on("message", function(message) {
 		}
 	}
 
-
 	// "h!help" in guilds, or "help" in private
 	if (msg === "H!HELP" || (msg === "HELP" && message.guild === null)) {
 		message.channel.send(helpText);
-		return;
-	}
-	// "h!statistics" in guilds, or "statistics in private
-	if (msg === "H!STATISTICS" || (msg === "STATISTICS" && message.guild === null)) {
-		message.channel.send(getStats());
 		return;
 	}
 	if (msg === "H!SOURCE" || (msg === "SOURCE" && message.guild === null)) {
@@ -147,10 +93,6 @@ bot.on("message", function(message) {
 
 			message.react("👌"); // react with :ok_hand:
 			bot.channels.get(prop.channel).send("New game started by <@"+user+">!\n"+getStatus(game)); // notify the users
-			if (stats.hasOwnProperty(word))
-				stats[word].count++;
-			else
-				stats[word] = {"count": 1, "hung": []};
 
 			// remove the :clock-2: reaction
 			bot.channels.get(prop.channel).fetchMessage(prop.messageId)
@@ -354,9 +296,6 @@ function strike(letter, game, author) {
 		resp = resp + "\n**GAME OVER**\n" + game.word + "\n\n";
 		game.finished = true;
 
-		if (stats.hasOwnProperty(word))
-			stats[word].hung.push(author);
-
 		if (game.scope == "public")
 			resp += "Use `h!new [strikes]` or `h!random` to start anew";
 		else
@@ -410,29 +349,6 @@ function printLetters(letters) {
 	return resp;
 }
 
-// returns game statistics
-function getStats() {
-	// TODO: get mostHung, hungCount, wordList
-	var mostHung = "489390925886521344"; // TODO
-	var mostActive = "356393895216545803"; // TODO
-	var hungCount = 1;
-	var resp = "**== STATISTICS ==**\n";
-	resp = resp + "TODO: add statistics\n\n"
-	//resp = resp + " Most hung user: `" + bot.users.get(mostHung).username +"` (hung `"+hungCount+"` time(s))\n";
-	//resp = resp + " Most active user: `" + bot.users.get(mostActive).username + "`\n";
-	//resp = resp + " Most popular words: ```" + getPopWords() +"```\n\n";
-	resp = resp + "Made with ❤️ by <@356393895216545803>\n";
-	resp = resp + "Thank you for playing Hangboi!\n";
-	return resp;
-}
-
-// gets a list of popular words
-//function getPopWords() {
-//	var resp = [""];
-//	for (var name in stats) resp = resp+"\n ("+stats[name].count+") "+name;
-//	return resp;
-//}
-
 // replaces all characters in a string with underscores
 function hide(str) {
 	str = str.split('');
@@ -462,36 +378,13 @@ function escape(str) {
 
 
 
-
-
-
-// called on interval or manually
-lastError = "";
-function save() {
-	lastError = "Still saving...";
-	fs.writeFile("./gameData.json", JSON.stringify(games, null, '\t'), function(err) {
-		if (err) console.log(err);
-		lastError = err;
-	});
-
-	fs.writeFile("./stats.json", JSON.stringify(stats, null, '\t'), function(err) {
-		if (err) console.log(err);
-		lastError = err;
-	});
-	return "please check $lastError for errors";
-}
-
-
-
-
 bot.on('ready', function() {
 	console.log('Hangboi ready!\n'); // bot initialization complete
 	bot.user.setActivity("hangman");
 });
 
 console.log("Hangboi awakes!");
-
-bot.login("[PRIVATE_KEY]");
+bot.login(process.env["CLIENT_SECRET"]);
 console.log("Hangboi remembers his password!"); // successfully performed login()
 
 
@@ -518,5 +411,5 @@ function crash(code) {
 }
 
 
-// made with <3 by @Jatan
+// made with <3 by <@356393895216545803>
 // yon.ploj@gmail.com
