@@ -1,21 +1,9 @@
 # Hangboi
-A Hangman bot for Discord
+A Hangman bot for Discord.
 
----
-Help text:
+Use `h!help` for help, or @mention the bot
 
-**PRIVATE** (send to DMs)
- * `new` - start new game (random word)
- * `status` - check status
- * `help` - display help
+Invite link:
+https://discord.com/api/oauth2/authorize?client_id=472455557035458584&permissions=388160&scope=bot
 
-**PUBLIC** (in guilds and group DMs)
- * `h!new [strikes]` - start a new game (I'll ask you for a word in private)
- * `h!random` - start a new game with a random word
- * `status` - (only if a game is running) checks the game status
-
----
-
-
-##### P.S.
-I will not accept pull requests. Go make your own bot.
+Hosted by Heroku.
